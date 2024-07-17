@@ -1,20 +1,18 @@
+import { router } from '@kit.ArkUI';
+
+
 @Entry
 @Component
 struct Index {
-  @State message: string = 'Hello World';
+  pathStack: NavPathStack = new NavPathStack()
 
   build() {
-    RelativeContainer() {
-      Text(this.message)
-        .id('HelloWorld')
-        .fontSize(50)
-        .fontWeight(FontWeight.Bold)
-        .alignRules({
-          center: { anchor: '__container__', align: VerticalAlign.Center },
-          middle: { anchor: '__container__', align: HorizontalAlign.Center }
-        })
+    Navigation(this.pathStack) {
     }
-    .height('100%')
-    .width('100%')
+    .title("Index")
+    .hideTitleBar(false)
+    .onAppear(() => {
+      router.pushUrl({ url: "pages/Login" })
+    })
   }
 }
