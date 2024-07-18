@@ -1,9 +1,7 @@
-
 import ItemData from '../models/ItemDataModel';
-import {mockGoodsList} from '../viewmodel/MockData'
+import { mockGoodsList } from '../viewmodel/MockData'
 
 export class IndexViewModel {
-
   getSwiperImages(): Array<Resource> {
     let swiperImages: Resource[] = [
       $r('app.media.jd1'),
@@ -29,16 +27,16 @@ export class IndexViewModel {
   }
 
   getSecondGridData(): Array<ItemData> {
-    let  secondGridData: ItemData[] = []
-    mockGoodsList.slice(1,5).forEach(item => {
-      secondGridData.push(new ItemData("",item.imageUrl))
+    let secondGridData: ItemData[] = []
+    mockGoodsList.slice(2, 6).forEach(item => {
+      secondGridData.push(new ItemData("", item.imageUrl))
     });
     return secondGridData
   }
 
   getSettingListData(): Array<ItemData> {
     let settingListData: ItemData[] = [
-      new ItemData('推送通知', $r('app.media.news'),''),
+      new ItemData('推送通知', $r('app.media.news'), ''),
       new ItemData('菜单设置', $r('app.media.data'), ''),
       new ItemData('服务', $r('app.media.menu'), ''),
       new ItemData('收藏', $r('app.media.about'), ''),
@@ -47,7 +45,6 @@ export class IndexViewModel {
     ]
     return settingListData
   }
-
 }
 
 export default new IndexViewModel()
