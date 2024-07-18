@@ -1,6 +1,6 @@
 import { GoodsItem } from '../models/GoodsModel';
 import { mockGoodsList } from '../viewmodel/MockData';
-import { Prompt, promptAction, router } from '@kit.ArkUI'
+import {  promptAction } from '@kit.ArkUI'
 
 @Component
 export default struct WaterFlowGoodsPage {
@@ -31,7 +31,7 @@ export default struct WaterFlowGoodsPage {
       Text('加载更多...')
     }
     .justifyContent(FlexAlign.Center)
-    .backgroundColor(Color.Pink)
+    .backgroundColor($r("app.color.background"))
     .height(60)
     .width('100%')
   }
@@ -65,10 +65,10 @@ export default struct WaterFlowGoodsPage {
   }
 
   loadMore() {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>((resolve) => {
       setTimeout(() => {
         this.goodsList.push(...this.goodsList.slice(0, 5))
-      }, 2000)
+      }, 1000)
       resolve(true)
     })
   }
