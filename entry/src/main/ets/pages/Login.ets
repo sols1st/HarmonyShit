@@ -8,23 +8,42 @@ export default function LoginBuilder() {
 }
 
 interface User {
-  name: string
+  name?: string
+  email?: string
+  role?: string
+}
+
+interface LoginUser {
   email: string
+  password: string
 }
 
 @Entry
 @Component
 struct Login {
+  @State loginUser: LoginUser = {
+    email: '',
+    password: ''
+  }
+
   async loginHandle() {
+
+
     const req = http.createHttp()
-    const res = await req.request("localhost:8080/login",{
+    const res = await req.request("localhost:8080/login", {
       method: http.RequestMethod.POST,
-      extraData: "application/json"
+      extraData: this.loginUser,
+      expectDataType: http.HttpDataType.OBJECT
     })
 
-    const user = JSON.parse(res.result.toString())
+    const user = JSON.parse(res.result.toString()) as User
+    console.info(user.role)
 
-    router.pushUrl({ url: "pages/Home" })
+    if (user.role === "user") {
+      router.pushUrl({ url: "pages/Home" })
+    } else {
+      promptAction.showToast({ message: "用户名或密码错误" })
+    }
   }
 
   registerHandle = () => {
@@ -48,9 +67,13 @@ struct Login {
             }
 
             ColumnSplit() {
-              TextInput({ placeholder: '用户名' })
+              TextInput({ placeholder: '邮箱' })
                 .backgroundColor("#eee")
                 .width("80%")
+                .type(InputType.Email)
+                .onChange(value => {
+                  this.loginUser.email = value
+                })
             }
 
             ColumnSplit() {
@@ -58,6 +81,9 @@ struct Login {
                 .backgroundColor("#eee")
                 .width("80%")
                 .type(InputType.Password)
+                .onChange(value => {
+                  this.loginUser.password = value
+                })
             }
 
             ColumnSplit() {
@@ -90,10 +116,10 @@ struct Login {
             }
 
             ColumnSplit() {
-              TextInput({ placeholder: '手机号' })
+              TextInput({ placeholder: '邮箱' })
                 .backgroundColor("#eee")
                 .width("80%")
-                .type(InputType.PhoneNumber)
+                .type(InputType.Email)
             }
 
             ColumnSplit() {
@@ -133,10 +159,10 @@ struct Login {
             }
 
             ColumnSplit() {
-              TextInput({ placeholder: '手机号' })
+              TextInput({ placeholder: '邮箱' })
                 .backgroundColor("#eee")
                 .width("80%")
-                .type(InputType.PhoneNumber)
+                .type(InputType.Email)
             }
 
             ColumnSplit() {
