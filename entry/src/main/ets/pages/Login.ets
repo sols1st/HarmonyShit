@@ -7,7 +7,7 @@ export default function LoginBuilder() {
   Login()
 }
 
-class User {
+export  class User {
   username?: string
   email?: string
   post?: number
@@ -39,6 +39,8 @@ struct Login {
           let user = JSON.parse(data.result.toString()) as User
 
           if (user.username) {
+            // 登录状态管理
+            AppStorage.setOrCreate("User", user)
             router.pushUrl({ url: "pages/Main" })
           } else {
             promptAction.showToast({ message: "用户名或密码错误" })

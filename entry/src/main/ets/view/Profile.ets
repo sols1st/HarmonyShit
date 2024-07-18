@@ -2,14 +2,15 @@ import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 import ItemData from '../common/ItemData';
 import mainViewModel from '../viewmodel/IndexViewModel';
+import { User } from '../pages/Login';
 
 
 @Component
 export default struct Profile {
+  @State user: User = AppStorage.get("User") as User;
 
-  @State account:string="誉天教育";
-
-  @Builder settingCell(item: ItemData) {
+  @Builder
+  settingCell(item: ItemData) {
     Row() {
       Row({ space: 12 }) {
         Image(item.img)
@@ -48,15 +49,16 @@ export default struct Profile {
         }
         .width('100%')
         .alignItems(HorizontalAlign.Start)
+
         // 个人信息
         Row() {
-          Image($r('app.media.account'))
+          Image($r('app.media.owl'))
             .width(48)
             .height(48)
           Column() {
-            Text(this.account)
+            Text(this.user.username)
               .fontSize(20)
-            Text('yutian@163.com')
+            Text(this.user.email)
               .fontSize(12)
               .margin({ top: 4 })
           }
@@ -92,7 +94,7 @@ export default struct Profile {
           endMargin: 42
         })
         .borderRadius(16)
-        .padding({ top: 4, bottom: 4 })
+        .padding({ top: 4, bottom: 4, left: 8 })
 
         Blank()
 
