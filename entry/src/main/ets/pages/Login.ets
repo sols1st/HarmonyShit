@@ -1,26 +1,65 @@
-import { Prompt, router } from '@kit.ArkUI';
+import { promptAction, router } from '@kit.ArkUI';
+import { http } from '@kit.NetworkKit';
+import { BusinessError } from '@kit.BasicServicesKit';
 
 @Builder
 export default function LoginBuilder() {
   Login()
 }
 
+class User {
+  username?: string
+  email?: string
+  post?: number
+  role?: string
+}
+
+class LoginUser {
+  email?: string
+  password?: string
+}
+
 @Entry
 @Component
 struct Login {
-  loginHandle = () => {
-    router.pushUrl({ url: "pages/Main" })
+  @State loginUser: LoginUser = {}
+
+  loginHandle = async () => {
+
+    const req = http.createHttp()
+    const res = req.request("localhost:8080/login", {
+      method: http.RequestMethod.POST,
+      extraData: this.loginUser,
+    })
+    await res.then((data) => {
+      if (data.responseCode == 200) {
+          let user = JSON.parse(data.result.toString()) as User
+
+          if (user.username) {
+            router.pushUrl({ url: "pages/Main" })
+          } else {
+            promptAction.showToast({ message: "用户名或密码错误" })
+          }
+        } else {
+          promptAction.showToast({ message: "网络错误请求失败！" })
+      }
+    }).catch((e: BusinessError) => {
+      console.log(e.message)
+    })
+
   }
   registerHandle = () => {
-    router.pushUrl({ url: "pages/Main" })
-  }
 
+    router.pushUrl({ url: "pages/Main" })
+
+  }
   modifyHandle = () => {
     router.pushUrl({ url: "pages/Main" })
-    Prompt.showDialog({ title: "系统消息", message: "更改密码成功 ✅" })
+    promptAction.showDialog({ title: "系统消息", message: "更改密码成功 ✅" })
   }
 
   build() {
+
       Tabs({ barPosition: BarPosition.End }) {
 
         TabContent() {
@@ -32,9 +71,13 @@ struct Login {
             }
 
             ColumnSplit() {
-              TextInput({ placeholder: '用户名' })
+              TextInput({ placeholder: '邮箱' })
                 .backgroundColor("#eee")
                 .width("80%")
+                .type(InputType.Email)
+                .onChange(value => {
+                  this.loginUser.email = value
+                })
             }
 
             ColumnSplit() {
@@ -42,6 +85,9 @@ struct Login {
                 .backgroundColor("#eee")
                 .width("80%")
                 .type(InputType.Password)
+                .onChange(value => {
+                  this.loginUser.password = value
+                })
             }
 
             ColumnSplit() {
@@ -74,10 +120,10 @@ struct Login {
             }
 
             ColumnSplit() {
-              TextInput({ placeholder: '手机号' })
+              TextInput({ placeholder: '邮箱' })
                 .backgroundColor("#eee")
                 .width("80%")
-                .type(InputType.PhoneNumber)
+                .type(InputType.Email)
             }
 
             ColumnSplit() {
@@ -117,10 +163,10 @@ struct Login {
             }
 
             ColumnSplit() {
-              TextInput({ placeholder: '手机号' })
+              TextInput({ placeholder: '邮箱' })
                 .backgroundColor("#eee")
                 .width("80%")
-                .type(InputType.PhoneNumber)
+                .type(InputType.Email)
             }
 
             ColumnSplit() {
