@@ -1,53 +1,53 @@
 import { promptAction, router } from '@kit.ArkUI';
 import { http } from '@kit.NetworkKit';
-import { JSON } from '@kit.ArkTS';
+import { BusinessError } from '@kit.BasicServicesKit';
 
 @Builder
 export default function LoginBuilder() {
   Login()
 }
 
-interface User {
-  name?: string
+class User {
+  username?: string
   email?: string
+  post?: number
   role?: string
 }
 
-interface LoginUser {
-  email: string
-  password: string
+class LoginUser {
+  email?: string
+  password?: string
 }
 
 @Entry
 @Component
 struct Login {
-  @State loginUser: LoginUser = {
-    email: '',
-    password: ''
-  }
+  @State loginUser: LoginUser = {}
 
-  async loginHandle() {
-    console.log("click")
-    console.log(this.loginUser.password)
+  loginHandle = async () => {
+
     const req = http.createHttp()
-
-    console.log(this.loginUser.email)
-    const res = await req.request("localhost:8080/login", {
+    const res = req.request("localhost:8080/login", {
       method: http.RequestMethod.POST,
       extraData: this.loginUser,
-      expectDataType: http.HttpDataType.OBJECT
+    })
+    await res.then((data) => {
+      if (data.responseCode == 200) {
+          let user = JSON.parse(data.result.toString()) as User
+
+          if (user.username) {
+            router.pushUrl({ url: "pages/Main" })
+          } else {
+            promptAction.showToast({ message: "用户名或密码错误" })
+          }
+        } else {
+          promptAction.showToast({ message: "网络错误请求失败！" })
+      }
+    }).catch((e: BusinessError) => {
+      console.log(e.message)
     })
 
-    const user = JSON.parse(res.result.toString()) as User
-    console.info(user.role)
-
-    if (user.role === "user") {
-      router.pushUrl({ url: "pages/Home" })
-    } else {
-      promptAction.showToast({ message: "用户名或密码错误" })
-    }
   }
-
   registerHandle = () => {
     router.pushUrl({ url: "pages/Home" })
   }
