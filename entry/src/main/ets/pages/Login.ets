@@ -13,17 +13,14 @@ struct Login {
   }
   registerHandle = () => {
     router.pushUrl({ url: "pages/Main" })
-    // this.pathStack.pushPathByName("Home", null)
   }
 
   modifyHandle = () => {
     router.pushUrl({ url: "pages/Main" })
     Prompt.showDialog({ title: "系统消息", message: "更改密码成功 ✅" })
-    // this.pathStack.pushPathByName("Home", null)
   }
 
   build() {
-    // NavDestination() {
       Tabs({ barPosition: BarPosition.End }) {
 
         TabContent() {

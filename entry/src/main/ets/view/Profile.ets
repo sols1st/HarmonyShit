@@ -3,13 +3,10 @@ import promptAction from '@ohos.promptAction';
 import ItemData from '../common/ItemData';
 import mainViewModel from '../viewmodel/IndexViewModel';
 
-/**
- * 我的
- */
+
 @Component
 export default struct Profile {
 
-  //接收传递过来的参数
   @State account:string="誉天教育";
 
   @Builder settingCell(item: ItemData) {
@@ -22,14 +19,11 @@ export default struct Profile {
           .fontSize(16)
       }
 
-      // 设置功能item最右侧的功能项
       if (item.others === null) {
-        //可以进入下一级页面
         Image($r('app.media.right_grey'))
           .width(12)
           .height(24)
       } else {
-        //开关
         Toggle({ type: ToggleType.Switch, isOn: false })
       }
 
