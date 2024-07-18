@@ -6,10 +6,10 @@ import Profile from '../view/Profile';
 @Component
 struct Main {
   @State currentIndex: number = 0
-
   private tabsController: TabsController = new TabsController()
 
-  @Builder TabBuilder(title: string, index: number, selectedImg: Resource, normalImg: Resource) {
+  @Builder
+  TabBuilder(title: string, index: number, selectedImg: Resource, normalImg: Resource) {
     Column() {
       Image(this.currentIndex === index ? selectedImg : normalImg)
         .width(24)
@@ -29,28 +29,34 @@ struct Main {
   }
 
   build() {
-      Tabs({ barPosition: BarPosition.End ,controller: this.tabsController}) {
-        TabContent() {
-          Index()
-        }.padding({ left: 12, right: 12 })
-        .backgroundColor($r('app.color.mainPage_backgroundColor')).tabBar(this.TabBuilder('首页', 0, $r('app.media.home_selected'), $r('app.media.home_normal')))
-
-        TabContent() {
-          Recommend()
-        }.padding({ left: 12, right: 12 })
-        .backgroundColor($r('app.color.mainPage_backgroundColor')).tabBar(this.TabBuilder('精选', 0, $r('app.media.discover_selected'), $r('app.media.discover_normal')))
-
-        TabContent() {
-          Profile()
-        }.padding({ left: 12, right: 12 })
-        .backgroundColor($r('app.color.mainPage_backgroundColor')).tabBar(this.TabBuilder('我的', 0, $r('app.media.profile_selected'), $r('app.media.profile_normal')))
+    Tabs({ barPosition: BarPosition.End, controller: this.tabsController }) {
+      TabContent() {
+        Index()
       }
-      .width('100%')
-      .backgroundColor(Color.White)
-      .barHeight(56)
-      .barMode(BarMode.Fixed)
-      .onChange((index: number) => {
-        this.currentIndex = index;
-      })
+      .padding({ left: 12, right: 12 })
+      .backgroundColor($r('app.color.mainPage_backgroundColor'))
+      .tabBar(this.TabBuilder('首页', 0, $r('app.media.home_selected'), $r('app.media.home_normal')))
+
+      TabContent() {
+        Recommend()
+      }
+      .padding({ left: 12, right: 12 })
+      .backgroundColor($r('app.color.mainPage_backgroundColor'))
+      .tabBar(this.TabBuilder('精选', 1, $r('app.media.discover_selected'), $r('app.media.discover_normal')))
+
+      TabContent() {
+        Profile()
+      }
+      .padding({ left: 12, right: 12 })
+      .backgroundColor($r('app.color.mainPage_backgroundColor'))
+      .tabBar(this.TabBuilder('我的', 2, $r('app.media.profile_selected'), $r('app.media.profile_normal')))
     }
+    .width('100%')
+    .backgroundColor(Color.White)
+    .barHeight(56)
+    .barMode(BarMode.Fixed)
+    .onChange((index: number) => {
+      this.currentIndex = index;
+    })
+  }
 }
