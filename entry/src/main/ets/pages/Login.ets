@@ -27,9 +27,11 @@ struct Login {
   }
 
   async loginHandle() {
-
-
+    console.log("click")
+    console.log(this.loginUser.password)
     const req = http.createHttp()
+
+    console.log(this.loginUser.email)
     const res = await req.request("localhost:8080/login", {
       method: http.RequestMethod.POST,
       extraData: this.loginUser,
