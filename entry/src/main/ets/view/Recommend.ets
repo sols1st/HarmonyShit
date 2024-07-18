@@ -3,7 +3,7 @@ import { mockGoodsList } from '../services/MockData';
 import { Prompt, promptAction, router } from '@kit.ArkUI'
 
 @Component
-export default struct Recommends {
+export default struct WaterFlowGoodsPage {
   @State goodsList: GoodsItem[] = mockGoodsList
   @State isLoadMore: boolean = false
 
@@ -18,6 +18,10 @@ export default struct Recommends {
         .lineHeight(22)
         .maxLines(3)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
+      Text(item.price)
+        .fontSize(14)
+        .fontWeight(FontWeight.Bold)
+        .margin({ top: 5 })
     }
   }
 
