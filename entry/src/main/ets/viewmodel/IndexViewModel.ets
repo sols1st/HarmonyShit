@@ -53,11 +53,11 @@ export class IndexViewModel {
   getSettingListData(): Array<ItemData> {
     let settingListData: ItemData[] = [
       new ItemData('推送通知', $r('app.media.news'), '开关'),
-      new ItemData('数据管理', $r('app.media.data'), ''),
-      new ItemData('菜单设置', $r('app.media.menu'), ''),
-      new ItemData('关于', $r('app.media.about'), ''),
-      new ItemData('清除缓存', $r('app.media.storage'), ''),
-      new ItemData('隐私协议', $r('app.media.privacy'), '')
+      new ItemData('菜单设置', $r('app.media.data'), ''),
+      new ItemData('服务', $r('app.media.menu'), ''),
+      new ItemData('收藏', $r('app.media.about'), ''),
+      new ItemData('设置', $r('app.media.storage'), ''),
+      new ItemData('隐私', $r('app.media.privacy'), '')
     ]
     return settingListData
   }

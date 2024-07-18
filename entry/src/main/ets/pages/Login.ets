@@ -22,7 +22,10 @@ class LoginUser {
 @Entry
 @Component
 struct Login {
-  @State loginUser: LoginUser = {}
+  @State loginUser: LoginUser = {
+    email:"test@test.com",
+    password:"123456"
+  }
 
   loginHandle = async () => {
 
