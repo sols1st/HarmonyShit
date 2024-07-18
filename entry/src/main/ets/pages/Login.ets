@@ -1,26 +1,38 @@
-import { Prompt, router } from '@kit.ArkUI';
+import { promptAction, router } from '@kit.ArkUI';
+import { http } from '@kit.NetworkKit';
+import { JSON } from '@kit.ArkTS';
 
 @Builder
 export default function LoginBuilder() {
   Login()
 }
 
+interface User {
+  name: string
+  email: string
+}
+
 @Entry
 @Component
 struct Login {
-  pathStack: NavPathStack = new NavPathStack()
-  loginHandle = () => {
+  async loginHandle() {
+    const req = http.createHttp()
+    const res = await req.request("localhost:8080/login",{
+      method: http.RequestMethod.POST,
+      extraData: "application/json"
+    })
+
+    const user = JSON.parse(res.result.toString())
+
     router.pushUrl({ url: "pages/Home" })
-  }
-  registerHandle = () => {
-    router.pushUrl({ url: "pages/Home" })
-    // this.pathStack.pushPathByName("Home", null)
   }
 
+  registerHandle = () => {
+    router.pushUrl({ url: "pages/Home" })
+  }
   modifyHandle = () => {
     router.pushUrl({ url: "pages/Home" })
-    Prompt.showDialog({ title: "系统消息", message: "更改密码成功 ✅" })
-    // this.pathStack.pushPathByName("Home", null)
+    promptAction.showToast({ message: "更改密码成功 ✅" })
   }
 
   build() {

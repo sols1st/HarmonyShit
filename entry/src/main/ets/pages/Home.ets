@@ -1,4 +1,4 @@
-import { Prompt, promptAction, router } from '@kit.ArkUI'
+import { promptAction, router } from '@kit.ArkUI'
 
 @Styles
 function imgStyle() {
@@ -179,8 +179,5 @@ struct Home {
       }
     }
     .title('Home')
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack
-    })
   }
 }
