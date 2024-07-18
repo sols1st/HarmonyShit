@@ -8,23 +8,22 @@ export default function LoginBuilder() {
 @Entry
 @Component
 struct Login {
-  pathStack: NavPathStack = new NavPathStack()
   loginHandle = () => {
-    router.pushUrl({ url: "pages/Home" })
+    router.pushUrl({ url: "pages/Main" })
   }
   registerHandle = () => {
-    router.pushUrl({ url: "pages/Home" })
+    router.pushUrl({ url: "pages/Main" })
     // this.pathStack.pushPathByName("Home", null)
   }
 
   modifyHandle = () => {
-    router.pushUrl({ url: "pages/Home" })
+    router.pushUrl({ url: "pages/Main" })
     Prompt.showDialog({ title: "系统消息", message: "更改密码成功 ✅" })
     // this.pathStack.pushPathByName("Home", null)
   }
 
   build() {
-    NavDestination() {
+    // NavDestination() {
       Tabs({ barPosition: BarPosition.End }) {
 
         TabContent() {
@@ -163,6 +162,4 @@ struct Login {
 
       }
     }
-    .title('Login')
-  }
 }
