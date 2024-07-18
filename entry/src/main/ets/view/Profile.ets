@@ -1,6 +1,6 @@
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
-import ItemData from '../common/ItemData';
+import ItemData from '../models/ItemDataModel';
 import mainViewModel from '../viewmodel/IndexViewModel';
 import { User } from '../pages/Login';
 

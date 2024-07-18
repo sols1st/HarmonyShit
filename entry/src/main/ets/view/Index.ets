@@ -1,22 +1,30 @@
 import mainViewModel from '../viewmodel/IndexViewModel';
-import ItemData from '../common/ItemData';
+import ItemData from '../models/ItemDataModel';
 
 @Component
 export default struct Index {
-
-  private swiperController: SwiperController = new SwiperController();
+  swiperController: SwiperController = new SwiperController();
 
   build() {
     Scroll() {
       Column({ space: 12 }) {
+        Search({ placeholder: '输入商品名称' })
+          .searchButton('搜索')
+          .width(400)
+          .height(40)
+          .backgroundColor("FFFFF")
+          .placeholderColor(Color.Grey)
+          .placeholderFont({ size: 14, weight: 400 })
+          .textFont({ size: 14, weight: 400 })
+          .width('100%')
+
         Swiper(this.swiperController) {
           ForEach(mainViewModel.getSwiperImages(), (img: Resource) => {
             Image(img).borderRadius(16)
           }, (img: Resource) => JSON.stringify(img.id))
         }
-        .margin({ top: 10 })
         .autoPlay(true)
-        //第一个网格布局
+
         Grid() {
           ForEach(mainViewModel.getFirstGridData(), (item: ItemData) => {
             GridItem() {
@@ -33,19 +41,14 @@ export default struct Index {
         }
         .columnsTemplate('1fr 1fr 1fr 1fr')
         .rowsTemplate('1fr 1fr')
-        .columnsGap(8)
+        .columnsGap(6)
         .rowsGap(12)
         .padding({ top: 12, bottom: 12 })
         .height(124)
         .backgroundColor(Color.White)
         .borderRadius(24)
 
-        Text('列表')
-          .fontSize(16)
-          .fontWeight(FontWeight.Medium)
-          .width('100%')
-          .margin({ top: 12 })
-        //第二个网格布局
+
         Grid() {
           ForEach(mainViewModel.getSecondGridData(), (secondItem: ItemData) => {
             GridItem() {
@@ -70,7 +73,7 @@ export default struct Index {
           }, (secondItem: ItemData) => JSON.stringify(secondItem))
         }
         .width('100%')
-        .height(260)
+        .height(300)
         .columnsTemplate('1fr 1fr')
         .rowsTemplate('1fr 1fr')
         .columnsGap(8)
@@ -78,6 +81,7 @@ export default struct Index {
         .margin({ bottom: 55 })
       }
     }
+    .scrollBar(BarState.Off)
     .height('100%')
   }
 }

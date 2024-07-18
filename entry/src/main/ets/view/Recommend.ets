@@ -1,5 +1,5 @@
 import { GoodsItem } from '../models/GoodsModel';
-import { mockGoodsList } from '../services/MockData';
+import { mockGoodsList } from '../viewmodel/MockData';
 import { Prompt, promptAction, router } from '@kit.ArkUI'
 
 @Component
@@ -37,39 +37,35 @@ export default struct WaterFlowGoodsPage {
   }
 
   build() {
-    WaterFlow({ footer: this.getFooter }) {
-      ForEach(this.goodsList, (item: GoodsItem, index: number) => {
-        FlowItem() {
-          this.getGoodsItemView(item, index)
+      WaterFlow({ footer: this.getFooter }) {
+        ForEach(this.goodsList, (item: GoodsItem, index: number) => {
+          FlowItem() {
+            this.getGoodsItemView(item, index)
+          }
+        })
+      }
+      .height('100%')
+      .columnsTemplate('1fr 1fr')
+      .columnsGap(10)
+      .rowsGap(10)
+      .padding(10)
+      .onReachEnd(async () => {
+        if (!this.isLoadMore) {
+          try {
+            this.isLoadMore = true
+            await this.loadMore()
+            this.isLoadMore = false
+          } catch (error) {
+            promptAction.showToast({ message: JSON.stringify(error) })
+          }
         }
       })
-    }
-    .height('100%')
-    .columnsTemplate('1fr 1fr')
-    .columnsGap(10)
-    .rowsGap(10)
-    .padding(10)
-    // 滑动到底部
-    .onReachEnd(async () => {
-      if (!this.isLoadMore) {
-        try {
-          this.isLoadMore = true
-          await this.loadMore()
-          this.isLoadMore = false
-        } catch (error) {
-          promptAction.showToast({ message: JSON.stringify(error) })
-        }
-      }
-    })
+      .margin({ top: 17 })
+
   }
 
-  /**
-   * 加载更多
-   * @returns
-   */
   loadMore() {
     return new Promise<boolean>((resolve, reject) => {
-      // mock网络请求
       setTimeout(() => {
         this.goodsList.push(...this.goodsList.slice(0, 5))
       }, 2000)
