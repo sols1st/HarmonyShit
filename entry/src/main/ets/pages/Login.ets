@@ -1,6 +1,6 @@
 import { promptAction, router } from '@kit.ArkUI';
-import { http } from '@kit.NetworkKit';
-import { BusinessError } from '@kit.BasicServicesKit';
+import userLogin from '../api/auth';
+import ErrorMessage from '../constants/ErrorCode';
 
 @Builder
 export default function LoginBuilder() {
@@ -10,11 +10,11 @@ export default function LoginBuilder() {
 export class User {
   username?: string
   email?: string
-  post?: number
+  posts: number = 0
   role?: string
 }
 
-class LoginUser {
+export class LoginUser {
   email?: string
   password?: string
 }
@@ -27,28 +27,15 @@ struct Login {
     password: "123456"
   }
   loginHandle = async () => {
-    const req = http.createHttp()
-    const res = req.request("localhost:8080/login", {
-      method: http.RequestMethod.POST,
-      extraData: this.loginUser,
-    })
-    await res.then((data) => {
-      if (data.responseCode == 200) {
-        let user = JSON.parse(data.result.toString()) as User
-
-        if (user.username) {
-          // 登录状态管理
-          AppStorage.setOrCreate("User", user)
-          router.pushUrl({ url: "pages/Main" })
-        } else {
-          promptAction.showToast({ message: "用户名或密码错误" })
-        }
-      } else {
-        promptAction.showToast({ message: "网络错误请求失败！" })
-      }
-    }).catch((e: BusinessError) => {
-      console.log(e.message)
-    })
+    const user = await userLogin(this.loginUser) as User
+    if (user.posts === 0) {
+      // 登录状态管理
+      AppStorage.setOrCreate("User", user)
+      router.pushUrl({ url: "pages/Main" })
+    } else {
+      const msg = ErrorMessage(user.posts)
+      promptAction.showToast({ message: msg })
+    }
   }
   registerHandle = () => {
     router.pushUrl({ url: "pages/Main" })
