@@ -1,7 +1,7 @@
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 import ItemData from '../models/ItemDataModel';
-import mainViewModel from '../viewmodel/IndexViewModel';
+import mainViewModel from '../viewmodel/MainViewModel';
 import { User } from '../pages/Login';
 
 
@@ -20,14 +20,7 @@ export default struct Profile {
           .fontSize(16)
       }
 
-      if (item.others === null) {
-        Image($r('app.media.right_grey'))
-          .width(12)
-          .height(24)
-      } else {
-        Toggle({ type: ToggleType.Switch, isOn: false })
-      }
-
+      Toggle({ type: ToggleType.Switch, isOn: false })
     }
     .justifyContent(FlexAlign.SpaceBetween)
     .width('100%')

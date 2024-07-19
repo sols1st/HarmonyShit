@@ -1,4 +1,4 @@
-import mainViewModel from '../viewmodel/IndexViewModel';
+import mainViewModel from '../viewmodel/MainViewModel';
 import ItemData from '../models/ItemDataModel';
 
 @Component
