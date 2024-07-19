@@ -1,5 +1,5 @@
 import { promptAction, router } from '@kit.ArkUI';
-import userLogin from '../api/auth';
+import userLogin, { checkUser } from '../api/auth';
 import userRegister from '../api/register';
 import ErrorMessage from '../constants/ErrorCode';
 
@@ -42,14 +42,14 @@ struct Login {
   loginHandle = async () => {
     if (this.loginUser.email === "" || this.loginUser.password === "") {
       promptAction.showToast({ message: "用户名或密码为空" })
+      return
     }
     let user = AppStorage.get("User") as User
 
     user = await userLogin(this.loginUser)
-    if (user.posts === 0) {
+    if (checkUser(user)) {
       AppStorage.setOrCreate("User", user)
-    }
-    if (user.role !== "not login" && user.role !== undefined) {
+
       router.pushUrl({ url: "pages/Main" })
     } else {
       const msg = ErrorMessage(user.posts)
@@ -62,7 +62,7 @@ struct Login {
       promptAction.showToast({ message: "两次密码输入不一致" })
     }
     let user = await userRegister(this.registerUser)
-    if (user.role !== "not login") {
+    if (checkUser(user)) {
       AppStorage.setOrCreate("User", user)
       router.pushUrl({ url: "pages/Main" })
     } else {

@@ -30,4 +30,10 @@ const userLogin = async (loginUser: LoginUser): Promise<User> => {
   })
 }
 
+
+const checkUser = (user: User): Boolean => {
+  return (user.posts === 0 && user.role !== "not login" && user.role !== undefined)
+}
+export {checkUser}
+
 export default userLogin
