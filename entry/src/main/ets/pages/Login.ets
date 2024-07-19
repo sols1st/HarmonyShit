@@ -26,11 +26,19 @@ struct Login {
     email: "test@test.com",
     password: "123456"
   }
+
   loginHandle = async () => {
-    const user = await userLogin(this.loginUser) as User
+    let user = AppStorage.get("User") as User
+    // 如果登录状态未保存
+    if (user === undefined) {
+      user = await userLogin(this.loginUser)
+      if (user.posts === 0) {
+        AppStorage.setOrCreate("User", user)
+        PersistentStorage.persistProp("User", user)
+      }
+    }
+
     if (user.posts === 0) {
-      // 登录状态管理
-      AppStorage.setOrCreate("User", user)
       router.pushUrl({ url: "pages/Main" })
     } else {
       const msg = ErrorMessage(user.posts)

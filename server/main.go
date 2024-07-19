@@ -3,7 +3,7 @@ package main
 import (
     "blogger/config"
     "blogger/models/dto"
-    "blogger/models/vo"
+    "blogger/service"
     "encoding/json"
     "io"
     "log"
@@ -42,23 +42,13 @@ func loginHandle(w http.ResponseWriter, r *http.Request) {
 
     log.Printf("user email: %v, user password: %v\n", loginUser.Email, loginUser.Password)
 
-    var response vo.LoginResponse
-    if loginUser.Email == "test@test.com" && loginUser.Password == "123456" {
-        response = vo.LoginResponse{
-            Username: "wjie",
-            Email:    "test@test.com",
-            Role:     "user",
-        }
-    } else {
-        response = vo.LoginResponse{
-            Role: "tourist",
-        }
-    }
+    //处理登录请求
+    var response = service.UserLogin(loginUser)
 
     w.Header().Set("Content-Type", "application/json")
     err = json.NewEncoder(w).Encode(response)
     checkError(err)
-    log.Print("login is accepted!\n\n")
+    log.Print("send user login response!\n\n")
 }
 
 func main() {

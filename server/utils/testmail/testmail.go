@@ -1,16 +1,15 @@
 package testmail
 
 import (
-    "fmt"
     "regexp"
 )
 
-func IsEmail(s string) (string, error) {
+func IsEmail(s string) bool {
     r, _ := regexp.Compile(`[\w._%+-]{1,20}@[\w.-]{2,20}.[A-Za-z]{2,3}`)
 
     if r.MatchString(s) {
-        return "Valid Email", nil
+        return true
     } else {
-        return "", fmt.Errorf("not a valid email")
+        return false
     }
 }
