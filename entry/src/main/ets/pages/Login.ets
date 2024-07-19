@@ -38,7 +38,7 @@ struct Login {
       }
     }
 
-    if (user.posts === 0) {
+    if (user.role !== "not login") {
       router.pushUrl({ url: "pages/Main" })
     } else {
       const msg = ErrorMessage(user.posts)
