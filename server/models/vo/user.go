@@ -6,3 +6,5 @@ type LoginResponse struct {
     Posts    int32  `json:"posts"`
     Role     string `json:"role"`
 }
+
+type RegisterResponse = LoginResponse

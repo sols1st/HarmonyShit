@@ -1,11 +1,8 @@
 package main
 
 import (
-    "blogger/config"
-    "blogger/models/dto"
-    "blogger/service"
-    "encoding/json"
-    "io"
+    "blogger/handlers"
+    "blogger/models/dao"
     "log"
     "net/http"
 )
@@ -16,46 +13,15 @@ func checkError(err error) {
     }
 }
 
-func loginHandle(w http.ResponseWriter, r *http.Request) {
-
-    config.Cors(w)
-    log.Printf("request: %v; remote address: %s; origin: %s\n\n", r.Method, r.RemoteAddr, r.Header.Get("Origin"))
-
-    if r.Method == http.MethodOptions {
-        return
-    }
-
-    if r.Method != http.MethodPost {
-        http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-        return
-    }
-
-    var loginUser dto.LoginRequest
-    err := json.NewDecoder(r.Body).Decode(&loginUser)
-
-    if err != nil {
-        http.Error(w, "Invalid request body", http.StatusBadRequest)
-        body, _ := io.ReadAll(r.Body)
-        log.Println("Request Body:", string(body))
-        return
-    }
-
-    log.Printf("user email: %v, user password: %v\n", loginUser.Email, loginUser.Password)
-
-    //处理登录请求
-    var response = service.UserLogin(loginUser)
-
-    w.Header().Set("Content-Type", "application/json")
-    err = json.NewEncoder(w).Encode(response)
-    checkError(err)
-    log.Print("send user login response!\n\n")
-}
-
 func main() {
-    http.HandleFunc("/login", loginHandle)
     log.SetFlags(log.Lshortfile | log.Ltime)
+    dao.MongoConnect()
+    defer dao.DisConnect(dao.Client)
 
-    log.Printf("The server is running!\n")
+    http.HandleFunc("/login", handlers.LoginHandler)
+    http.HandleFunc("/register", handlers.RegisterHandler)
+
+    log.Printf("The server is running-----------------------------------------------\n")
 
     err := http.ListenAndServe("localhost:8080", nil)
     checkError(err)

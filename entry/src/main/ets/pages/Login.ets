@@ -1,5 +1,6 @@
 import { promptAction, router } from '@kit.ArkUI';
 import userLogin from '../api/auth';
+import userRegister from '../api/register';
 import ErrorMessage from '../constants/ErrorCode';
 
 @Builder
@@ -19,34 +20,55 @@ export class LoginUser {
   password?: string
 }
 
+export class RegisterUser {
+  username?: string
+  email?: string
+  password?: string
+}
+
 @Entry
 @Component
 struct Login {
   @State loginUser: LoginUser = {
-    email: "test@test.com",
-    password: "123456"
+    // email: "test@test.com",
+    // password: "123456"
   }
-
+  @State registerUser: RegisterUser = {
+    username: "",
+    email: "",
+    password: ""
+  }
+  @State checkPass: string = ""
   loginHandle = async () => {
-    let user = AppStorage.get("User") as User
-    // 如果登录状态未保存
-    if (user === undefined) {
-      user = await userLogin(this.loginUser)
-      if (user.posts === 0) {
-        AppStorage.setOrCreate("User", user)
-        PersistentStorage.persistProp("User", user)
-      }
+    if (this.loginUser.email === "" || this.loginUser.password === "") {
+      promptAction.showToast({ message: "用户名或密码为空" })
     }
+    let user = AppStorage.get("User") as User
 
+    user = await userLogin(this.loginUser)
+    if (user.posts === 0) {
+      AppStorage.setOrCreate("User", user)
+    }
+    if (user.role !== "not login" && user.role !== undefined) {
+      router.pushUrl({ url: "pages/Main" })
+    } else {
+      const msg = ErrorMessage(user.posts)
+      console.log(msg)
+      promptAction.showToast({ message: msg })
+    }
+  }
+  registerHandle = async () => {
+    if (this.checkPass !== this.registerUser.password) {
+      promptAction.showToast({ message: "两次密码输入不一致" })
+    }
+    let user = await userRegister(this.registerUser)
     if (user.role !== "not login") {
+      AppStorage.setOrCreate("User", user)
       router.pushUrl({ url: "pages/Main" })
     } else {
       const msg = ErrorMessage(user.posts)
       promptAction.showToast({ message: msg })
     }
-  }
-  registerHandle = () => {
-    router.pushUrl({ url: "pages/Main" })
   }
   modifyHandle = () => {
     router.pushUrl({ url: "pages/Main" })
@@ -112,6 +134,9 @@ struct Login {
               .backgroundColor("#eee")
               .width("80%")
               .type(InputType.USER_NAME)
+              .onChange(value => {
+                this.registerUser.username = value
+              })
           }
 
           ColumnSplit() {
@@ -119,6 +144,9 @@ struct Login {
               .backgroundColor("#eee")
               .width("80%")
               .type(InputType.Email)
+              .onChange(value => {
+                this.registerUser.email = value
+              })
           }
 
           ColumnSplit() {
@@ -126,6 +154,9 @@ struct Login {
               .backgroundColor("#eee")
               .width("80%")
               .type(InputType.Password)
+              .onChange(value => {
+                this.registerUser.password = value
+              })
           }
 
           ColumnSplit() {
@@ -133,6 +164,9 @@ struct Login {
               .backgroundColor("#eee")
               .width("80%")
               .type(InputType.Password)
+              .onChange(value => {
+                this.checkPass = value
+              })
           }
 
           ColumnSplit() {

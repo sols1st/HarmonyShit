@@ -100,7 +100,6 @@ export default struct Profile {
           .backgroundColor($r('app.color.setting_button_backgroundColor'))
           .margin({ bottom: 55 })
           .onClick(() => {
-            PersistentStorage.deleteProp("User")
             promptAction.showToast({ message: '退出登录' })
             router.replaceUrl({ url: 'pages/Login' })
           })
