@@ -46,6 +46,23 @@ struct Login {
     }
     let user = AppStorage.get("User") as User
 
+    // 测试账户
+    if(this.loginUser.email === "t" || this.loginUser.password === "t"){
+      let testUser: User = {
+        username: "test",
+        email: "test@test.com",
+        posts: 1,
+        role: "admin"
+      }
+      AppStorage.setOrCreate("User",{
+        email: "test@test.com",
+        password: "123456",
+        posts: 0,
+        role: "admin"
+      } )
+      router.pushUrl({ url: "pages/Main" })
+    }
+
     user = await userLogin(this.loginUser)
     if (checkUser(user)) {
       AppStorage.setOrCreate("User", user)

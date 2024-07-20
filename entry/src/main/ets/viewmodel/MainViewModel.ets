@@ -28,8 +28,8 @@ export class IndexViewModel {
 
   getSecondGridData(): Array<ItemData> {
     let secondGridData: ItemData[] = []
-    mockGoodsList.slice(2, 6).forEach(item => {
-      secondGridData.push(new ItemData("", item.imageUrl))
+    mockGoodsList.slice(1, 5).forEach(item => {
+      secondGridData.push(new ItemData(item.title, item.imageUrl))
     });
     return secondGridData
   }

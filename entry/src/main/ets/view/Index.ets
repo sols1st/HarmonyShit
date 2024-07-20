@@ -1,9 +1,18 @@
 import mainViewModel from '../viewmodel/MainViewModel';
 import ItemData from '../models/ItemDataModel';
+import { promptAction } from '@kit.ArkUI';
 
 @Component
 export default struct Index {
   swiperController: SwiperController = new SwiperController();
+
+  firstClickGridHandle = (message:string) => {
+    promptAction.showDialog({ title: "跳转", message:message })
+  }
+
+  secondClickGridHandle = (title:string) => {
+    promptAction.showDialog({ title: "商品信息", message:title })
+  }
 
   build() {
     Scroll() {
@@ -20,7 +29,8 @@ export default struct Index {
 
         Swiper(this.swiperController) {
           ForEach(mainViewModel.getSwiperImages(), (img: Resource) => {
-            Image(img).borderRadius(16)
+            Image(img)
+              .borderRadius(16)
           }, (img: Resource) => JSON.stringify(img.id))
         }
         .autoPlay(true)
@@ -36,7 +46,9 @@ export default struct Index {
                   .fontSize(12)
                   .margin({ top: 4 })
               }
-            }
+            }.onClick(()=>{
+              this.firstClickGridHandle(item.title.toString())
+            })
           }, (item: ItemData) => JSON.stringify(item))
         }
         .columnsTemplate('1fr 1fr 1fr 1fr')
@@ -52,17 +64,10 @@ export default struct Index {
         Grid() {
           ForEach(mainViewModel.getSecondGridData(), (secondItem: ItemData) => {
             GridItem() {
-              Column() {
-                Text(secondItem.title)
-                  .fontSize(16)
-                  .fontWeight(FontWeight.Medium)
-                Text(secondItem.others)
-                  .margin({ top: 4 })
-                  .fontSize(12)
-                  .fontColor($r('app.color.home_grid_fontColor'))
-              }
-              .alignItems(HorizontalAlign.Start)
             }
+            .onClick(()=>{
+              this.secondClickGridHandle(secondItem.title.toString())
+            })
             .padding({ top: 8, left: 8 })
             .borderRadius(12)
             .align(Alignment.TopStart)
